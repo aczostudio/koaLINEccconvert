@@ -1,7 +1,7 @@
 {
   "name": "koalineccconvert",
   "version": "1.0.0",
-  "description": "",
+  "description": "KOA LINE Currency Converter",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
