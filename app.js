@@ -38,7 +38,7 @@ router.get('/', (ctx, next) => {
     ctx.body = 'Hello World!';
 });
 
-router.post('/webhook', async (ctx, next) => {
+router.get('/webhook', async (ctx, next) => {
     const req = ctx.request;
     const requestEvents = req.body.events;
     const res = ctx.response;
