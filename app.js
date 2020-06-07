@@ -14,60 +14,15 @@ app.use(logger());
 const router = new Router();
 app.use(router.routes());
 
-router.post('/webhook', (ctx, next) => {
-    let reply_token = ctx.req.body.events[0].replyToken;
-    reply(reply_token);
+router.post('/webhook', async (ctx, next) => {
+    const requestBody = ctx.request.body;
+    console.log(requestBody);
 });
-// app.use(router.allowedMethods());
 
-// app.use(async (ctx, next) => {
-//     try {
-//         await next();
-//     } catch (err) {
-//         ctx.status = err.status || 500;
-//         ctx.body = err.message;
-//         ctx.app.emit('error', err, ctx);
-//     }
-// });
+router.get('/', (ctx, next) => {
+    ctx.body = 'Hello World!';
+});
 
-// app.on('error', (err, ctx) => {
-//     /* centralized error handling:
-//         *   console.log error
-//         *   write error to log file
-//         *   save error and request information to database if ctx.request match condition
-//         *   ...
-//     */
-// });
-
-// app.use(router.post('/webhooks/status', routes.status));
-// app.use(router.post('/webhooks/inbound', routes.inbound));
-
-// app.listen(port, () => console.log('App is wating on port ${port}'));
-
-// router.get('/', (ctx, next) => {
-//     ctx.body = 'Hello World!';
-// });
-
-// router.get('/webhook', async (ctx, next) => {
-//     const req = ctx.request;
-//     const requestEvents = req.body.events;
-//     const res = ctx.response;
-//     reply(requestEvents.body.events[0].replyToken);
-//     ctx.status = status || 200;
-// });
-
-// router.get('/webhook', (req, res) => {
-//     let reply_token = req.body.events[0].replyToken
-//     reply(reply_token)
-//     res.sendStatus(200)
-// })
-// router.post('/webhooks', async (ctx, next) => {
-//     const req = ctx.request;
-//     const requestEvents = req.body.events;
-//     const res = ctx.response;
-//     reply(requestEvents.body.events[0].replyToken);
-//     ctx.status = status || 200;
-// })
 
 const server = app.listen(port);
 module.exports = server;
@@ -96,3 +51,53 @@ function reply(reply_token) {
         console.log('status = ' + res.statusCode);
     });
 }
+
+// app.use(router.allowedMethods());
+
+// app.use(async (ctx, next) => {
+//     try {
+//         await next();
+//     } catch (err) {
+//         ctx.status = err.status || 500;
+//         ctx.body = err.message;
+//         ctx.app.emit('error', err, ctx);
+//     }
+// });
+
+// app.on('error', (err, ctx) => {
+//     /* centralized error handling:
+//         *   console.log error
+//         *   write error to log file
+//         *   save error and request information to database if ctx.request match condition
+//         *   ...
+//     */
+// });
+
+// app.use(router.post('/webhooks/status', routes.status));
+// app.use(router.post('/webhooks/inbound', routes.inbound));
+
+// app.listen(port, () => console.log('App is wating on port ${port}'));
+
+
+
+// router.get('/webhook', async (ctx, next) => {
+//     const req = ctx.request;
+//     const requestEvents = req.body.events;
+//     const res = ctx.response;
+//     reply(requestEvents.body.events[0].replyToken);
+//     ctx.status = status || 200;
+// });
+
+// router.get('/webhook', (req, res) => {
+//     let reply_token = req.body.events[0].replyToken
+//     reply(reply_token)
+//     res.sendStatus(200)
+// })
+// router.post('/webhooks', async (ctx, next) => {
+//     const req = ctx.request;
+//     const requestEvents = req.body.events;
+//     const res = ctx.response;
+//     reply(requestEvents.body.events[0].replyToken);
+//     ctx.status = status || 200;
+// })
+
