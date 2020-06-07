@@ -4,27 +4,15 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const logger = require('koa-logger');
 const bodyParser = require('koa-bodyparser');
+
 const app = new Koa();
 const router = new Router();
-const port = process.env.PORT || 4000
-router.get('/', (ctx, next) => {
-    ctx.body = 'Hello World!';
-})
-// router.get('/webhook', (req, res) => {
-//     let reply_token = req.body.events[0].replyToken
-//     reply(reply_token)
-//     res.sendStatus(200)
-// })
-router.post('/webhooks', async (ctx, next) => {
-    const req = ctx.request;
-    const requestEvents = req.body.events;
-    const res = ctx.response;
-    reply(requestEvents.body.events[0].replyToken);
-    ctx.status = status || 200;
-})
+const port = process.env.PORT || 4000;
+
 app.use(logger());
 app.use(router.routes());
 app.use(router.allowedMethods());
+app.use(bodyParser());
 
 app.use(async (ctx, next) => {
     try {
@@ -34,20 +22,45 @@ app.use(async (ctx, next) => {
         ctx.body = err.message;
         ctx.app.emit('error', err, ctx);
     }
-})
+});
 
 app.on('error', (err, ctx) => {
     /* centralized error handling:
-     *   console.log error
-     *   write error to log file
-     *   save error and request information to database if ctx.request match condition
-     *   ...
+        *   console.log error
+        *   write error to log file
+        *   save error and request information to database if ctx.request match condition
+        *   ...
     */
 });
 
+
+router.get('/', (ctx, next) => {
+    ctx.body = 'Hello World!';
+});
+
+router.post('/webhook', async (ctx, next) => {
+    const req = ctx.request;
+    const requestEvents = req.body.events;
+    const res = ctx.response;
+    reply(requestEvents.body.events[0].replyToken);
+    ctx.status = status || 200;
+});
+
+// router.get('/webhook', (req, res) => {
+//     let reply_token = req.body.events[0].replyToken
+//     reply(reply_token)
+//     res.sendStatus(200)
+// })
+// router.post('/webhooks', async (ctx, next) => {
+//     const req = ctx.request;
+//     const requestEvents = req.body.events;
+//     const res = ctx.response;
+//     reply(requestEvents.body.events[0].replyToken);
+//     ctx.status = status || 200;
+// })
+
 const server = app.listen(port);
 module.exports = server;
-
 
 function reply(reply_token) {
     let headers = {
