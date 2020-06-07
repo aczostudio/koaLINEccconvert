@@ -1,16 +1,46 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const request = require('request')
-const app = express()
+// const express = require('express')
+// const app = express()
+const Koa = require('koa');
+const Router = require('koa-router');
+const logger = require('koa-logger');
+const app = new Koa();
+const router = new Router();
 const port = process.env.PORT || 4000
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.post('/webhook', (req, res) => {
+router.get('/', (ctx, next) => {
+    ctx.body = 'Hello World!';
+})
+router.get('/webhook', (req, res) => {
     let reply_token = req.body.events[0].replyToken
     reply(reply_token)
     res.sendStatus(200)
 })
-app.listen(port)
+app.use(logger());
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+app.use(async (ctx, next) => {
+    try {
+        await next();
+    } catch (err) {
+        ctx.status = err.status || 500;
+        ctx.body = err.message;
+        ctx.app.emit('error', err, ctx);
+    }
+})
+
+app.on('error', (err, ctx) => {
+    /* centralized error handling:
+     *   console.log error
+     *   write error to log file
+     *   save error and request information to database if ctx.request match condition
+     *   ...
+    */
+});
+
+const server = app.listen(port);
+module.exports = server;
+
+
 function reply(reply_token) {
     let headers = {
         'Content-Type': 'application/json',
