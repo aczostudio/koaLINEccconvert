@@ -3,16 +3,24 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const logger = require('koa-logger');
+const bodyParser = require('koa-bodyparser');
 const app = new Koa();
 const router = new Router();
 const port = process.env.PORT || 4000
 router.get('/', (ctx, next) => {
     ctx.body = 'Hello World!';
 })
-router.get('/webhook', (req, res) => {
-    let reply_token = req.body.events[0].replyToken
-    reply(reply_token)
-    res.sendStatus(200)
+// router.get('/webhook', (req, res) => {
+//     let reply_token = req.body.events[0].replyToken
+//     reply(reply_token)
+//     res.sendStatus(200)
+// })
+router.post('/webhooks', async (ctx, next) => {
+    const req = ctx.request;
+    const requestEvents = req.body.events;
+    const res = ctx.response;
+    reply(requestEvents.body.events[0].replyToken);
+    ctx.status = status || 200;
 })
 app.use(logger());
 app.use(router.routes());
