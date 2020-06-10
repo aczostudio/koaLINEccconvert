@@ -36,10 +36,12 @@ router
     .post('/webhook', async (ctx, next) => {
         try {
             let reply_Token = ctx.request.body.events[0].replyToken;
+            console.log('token = ' , reply_Token);
             if(reply_Token ===  '00000000000000000000000000000000') {
                 ctx.status = 200;
             } else {
-                await router.post({
+                await next();
+                router.post({
                     method: 'POST',
                     url: 'https://api.line.me/v2/bot/message/reply',
                     headers: {
