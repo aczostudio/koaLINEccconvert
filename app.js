@@ -34,13 +34,14 @@ router
         ctx.body = 'Hello World!';
     })
     .post('/webhook', async (ctx, next) => {
+        console.log("call webhook");
+        console.log(ctx);
         try {
             let reply_Token = ctx.request.body.events[0].replyToken;
             console.log('token = ' , reply_Token);
             if(reply_Token ===  '00000000000000000000000000000000') {
                 ctx.status = 200;
             } else {
-                await next();
                 router.post({
                     method: 'POST',
                     url: 'https://api.line.me/v2/bot/message/reply',
