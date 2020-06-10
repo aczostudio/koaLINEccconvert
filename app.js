@@ -38,7 +38,7 @@ router
         console.log(ctx);
         try {
             console.log('token = ' , ctx.request.body.events[0].replyToken);
-            if(reply_Token ===  '00000000000000000000000000000000') {
+            if(ctx.request.body.events[0].replyToken ===  '00000000000000000000000000000000') {
                 ctx.status = 200;
             } else {
                 router.post({
