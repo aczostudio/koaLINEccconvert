@@ -37,8 +37,7 @@ router
         console.log("call webhook");
         console.log(ctx);
         try {
-            var reply_Token = ctx.request.body.events[0].replyToken;
-            console.log('token = ' , reply_Token);
+            console.log('token = ' , ctx.request.body.events[0].replyToken);
             if(reply_Token ===  '00000000000000000000000000000000') {
                 ctx.status = 200;
             } else {
@@ -49,8 +48,8 @@ router
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer {ShkuSBy9o1OAXcyOyYYBctPrd3aY3ZuUdDlTfdvjomurWcnE38CjKechkXF++7G9wh8C6/1Ise1iEVQzcwHpr1nwsajzUieMqrZZmgtga8ZNmbKfech4BV0zui3kkzYpqUu752d4Uzol+gPpXvJcpwdB04t89/1O/w1cDnyilFU=}'
                     },
-                    body: ({
-                        replyToken: reply_token,
+                    body: {
+                        replyToken: ctx.request.body.events[0].replyToken,
                         messages: [{
                             type: 'text',
                             text: 'Hello'
@@ -59,7 +58,7 @@ router
                             type: 'text',
                             text: 'How are you?'
                         }]
-                    }),
+                    },
                     json: true
                 })
             }
