@@ -37,7 +37,7 @@ router
         console.log("call webhook");
         console.log(ctx);
         try {
-            let reply_Token = ctx.request.body.events[0].replyToken;
+            var reply_Token = ctx.request.body.events[0].replyToken;
             console.log('token = ' , reply_Token);
             if(reply_Token ===  '00000000000000000000000000000000') {
                 ctx.status = 200;
