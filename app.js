@@ -42,7 +42,6 @@ router
                 ctx.status = 200;
             } else {
                 router.post({
-                    method: 'POST',
                     url: 'https://api.line.me/v2/bot/message/reply',
                     headers: {
                         'Content-Type': 'application/json',
