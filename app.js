@@ -30,7 +30,7 @@ app
     });
 
 router
-    .get('/', (ctx, next) => { 
+    .get('/', async (ctx, next) => { 
         ctx.body = 'Hello World!';
     })
     .post('/webhook', async (ctx, next) => {
@@ -41,7 +41,7 @@ router
             if(ctx.request.body.events[0].replyToken ===  '00000000000000000000000000000000') {
                 ctx.status = 200;
             } else {
-                router.post({
+                var line_post = await router.post({
                     url: 'https://api.line.me/v2/bot/message/reply',
                     headers: {
                         'Content-Type': 'application/json',
@@ -60,6 +60,8 @@ router
                     },
                     json: true
                 })
+
+                console.log('posting = ' , line_post)
             }
         } catch (err) {
             console.log('server error', err, ctx);
